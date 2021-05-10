@@ -16,9 +16,7 @@ import it.unisa.model.ProductModelDS;
 import it.unisa.model.Cart;
 import it.unisa.model.ProductBean;
 
-/**
- * Servlet implementation class ProductControl
- */
+
 public class ProductControl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

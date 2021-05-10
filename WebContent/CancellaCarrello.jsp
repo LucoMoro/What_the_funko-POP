@@ -12,6 +12,7 @@
 <p> Complimenti. Hai proeduto all'acquisto, clicca qui per tornare al sito principale </p>
 
 <a href="ProductView.jsp">Torna alla home</a>
+<a href="Orders.jsp"> Vedi i tuoi ordini</a>
 
 </body>
 </html>
