@@ -5,58 +5,64 @@ import java.util.List;
 
 public class Cart {
 
-	private ArrayList<ProductBean> products;
-	
+	private ArrayList<CartItem> products;
+
 	public Cart() {
-		products = new ArrayList<ProductBean>();
+		products = new ArrayList<CartItem>();
 	}
-	
+
 	public void addProduct(ProductBean product) {
-			boolean trovo=false;
-			int quantitativo=1;
-			for(ProductBean prod : products) {
-			if(prod.getCode() == product.getCode()) {
-				quantitativo=prod.getQuantità();
-				quantitativo=quantitativo+1;
-				//System.out.println(quantitativo);
-				prod.setQuantità(quantitativo);
-				trovo=true;
-				break;
+		for (int i=0; i<products.size(); i++) {
+
+			if(products.get(i).getProduct().equals(product)) {
+				products.get(i).incrementQuantity();
+				return;
 			}
+
 		}
-		if (trovo==false) {
-			products.add(product);
-		}	
-	
+
+		CartItem cartItem = new CartItem(product);
+		products.add(cartItem);
 	}
-	
+
+
+
 	public void deleteProduct(ProductBean product) {
-		for(ProductBean prod : products) {
-			if(prod.getCode() == product.getCode()) {
-				products.remove(prod);
-				break;
-			}
+		for (int i=0; i<products.size(); i++) {
+
+			if(products.get(i).getProduct().equals(product)) {
+				products.remove(i);
+				return;
+			}	
 		}
- 	}
-	
-	public ArrayList<ProductBean> getProducts() {
+	}
+
+
+	public ArrayList<CartItem> getProducts() {
 		return  products;
 	}
-	
+
+
+
 	public Cart clone() {
-		Cart newcart= new Cart();
-		ArrayList<ProductBean> array= getProducts();
+		Cart newcart= new Cart(); //nuovo array
+		ArrayList<CartItem> array= getProducts(); //ci mettiamo tutti i prodotti di CartItem nella variabile array
 		for (int i=0; i<array.size(); i++) {
-			ProductBean x = array.get(i);
+			ProductBean x = array.get(i).getProduct();//scorro l'array che dovrei copiarmi. Prima copio il prodotto, 
+			x.setQuantity(array.get(i).getQuantity());//poi la quantità e successivamente lo aggiungo. questo per ogni iterazione
 			newcart.addProduct(x);
 		}
-		
+
 		return newcart;
 	}
-	
+
+
+
 	public void deleteAll() {
 		for(int i=0; i< products.size(); i++) {
-			deleteProduct(products.get(i));
+			deleteProduct(products.get(i).getProduct()); //cancella il prodotto in cima a CartItem iterando per ogni elemento
 		}
 	}
 }
+
+

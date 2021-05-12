@@ -1,4 +1,4 @@
-package it.unisa.model;
+package it.unisa.model.DS;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,29 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-public class ProductModelDM implements ProductModel {
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+import it.unisa.model.ProductBean;
+import it.unisa.model.Model.ProductModel;
+
+public class ProductModelDS implements ProductModel {
+
+	private static DataSource ds;
+
+	static {
+		try {
+			Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+
+			ds = (DataSource) envCtx.lookup("jdbc/storage");
+
+		} catch (NamingException e) {
+			System.out.println("Error:" + e.getMessage());
+		}
+	}
 
 	private static final String TABLE_NAME = "product";
 
@@ -17,11 +39,11 @@ public class ProductModelDM implements ProductModel {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		String insertSQL = "INSERT INTO " + ProductModelDM.TABLE_NAME
-				+ " (NAME, DESCRIPTION, PRICE, QUANTITY, RARITY, DIMENSION, FRANCHISENAME, SERIES, MEDIUMSCORE) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		String insertSQL = "INSERT INTO " + ProductModelDS.TABLE_NAME
+				+ " (PRODUCT_NAME, PRODUCT_DESCRIPTION, PRICE, QUANTITY, RARITY, DIMENSION, FRANCHISENAME, SERIES, MEDIUMSCORE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try {
-			connection = DriverManagerConnectionPool.getConnection();
+			connection = ds.getConnection();
 			preparedStatement = connection.prepareStatement(insertSQL);
 			preparedStatement.setString(1, product.getName());
 			preparedStatement.setString(2, product.getDescription());
@@ -29,10 +51,10 @@ public class ProductModelDM implements ProductModel {
 			preparedStatement.setInt(4, product.getQuantity());
 			preparedStatement.setInt(5, product.getRarity());
 			preparedStatement.setDouble(6, product.getDimension());
-			//preparedStatement.setString(7, product.getFranchiseName());
+			preparedStatement.setString(7, product.getFranchiseName());
 			preparedStatement.setString(7, product.getSeries());
-			//preparedStatement.setDouble(9, product.getMediumScore());
-			
+			preparedStatement.setDouble(9, product.getMediumScore());
+
 			preparedStatement.executeUpdate();
 
 			connection.commit();
@@ -41,7 +63,8 @@ public class ProductModelDM implements ProductModel {
 				if (preparedStatement != null)
 					preparedStatement.close();
 			} finally {
-				DriverManagerConnectionPool.releaseConnection(connection);
+				if (connection != null)
+					connection.close();
 			}
 		}
 	}
@@ -53,10 +76,10 @@ public class ProductModelDM implements ProductModel {
 
 		ProductBean bean = new ProductBean();
 
-		String selectSQL = "SELECT * FROM " + ProductModelDM.TABLE_NAME + " WHERE CODE = ?";
+		String selectSQL = "SELECT * FROM " + ProductModelDS.TABLE_NAME + " WHERE CODE = ?";
 
 		try {
-			connection = DriverManagerConnectionPool.getConnection();
+			connection = ds.getConnection();
 			preparedStatement = connection.prepareStatement(selectSQL);
 			preparedStatement.setInt(1, code);
 
@@ -70,9 +93,9 @@ public class ProductModelDM implements ProductModel {
 				bean.setQuantity(rs.getInt("QUANTITY"));
 				bean.setRarity(rs.getInt("RARITY"));
 				bean.setDimension(rs.getDouble("DIMENSION"));
-				//bean.setFranchiseName(rs.getString("FRANCHISENAME"));
+				bean.setFranchiseName(rs.getString("FRANCHISENAME"));
 				bean.setSeries(rs.getString("SERIES"));
-				//bean.setMediumScore(rs.getDouble("MEDIUMSCORE"));
+				bean.setMediumScore(rs.getDouble("MEDIUMSCORE"));
 			}
 
 		} finally {
@@ -80,7 +103,8 @@ public class ProductModelDM implements ProductModel {
 				if (preparedStatement != null)
 					preparedStatement.close();
 			} finally {
-				DriverManagerConnectionPool.releaseConnection(connection);
+				if (connection != null)
+					connection.close();
 			}
 		}
 		return bean;
@@ -93,10 +117,10 @@ public class ProductModelDM implements ProductModel {
 
 		int result = 0;
 
-		String deleteSQL = "DELETE FROM " + ProductModelDM.TABLE_NAME + " WHERE CODE = ?";
+		String deleteSQL = "DELETE FROM " + ProductModelDS.TABLE_NAME + " WHERE CODE = ?";
 
 		try {
-			connection = DriverManagerConnectionPool.getConnection();
+			connection = ds.getConnection();
 			preparedStatement = connection.prepareStatement(deleteSQL);
 			preparedStatement.setInt(1, code);
 
@@ -107,7 +131,8 @@ public class ProductModelDM implements ProductModel {
 				if (preparedStatement != null)
 					preparedStatement.close();
 			} finally {
-				DriverManagerConnectionPool.releaseConnection(connection);
+				if (connection != null)
+					connection.close();
 			}
 		}
 		return (result != 0);
@@ -120,14 +145,14 @@ public class ProductModelDM implements ProductModel {
 
 		Collection<ProductBean> products = new LinkedList<ProductBean>();
 
-		String selectSQL = "SELECT * FROM " + ProductModelDM.TABLE_NAME;
+		String selectSQL = "SELECT * FROM " + ProductModelDS.TABLE_NAME;
 
 		if (order != null && !order.equals("")) {
 			selectSQL += " ORDER BY " + order;
 		}
 
 		try {
-			connection = DriverManagerConnectionPool.getConnection();
+			connection = ds.getConnection();
 			preparedStatement = connection.prepareStatement(selectSQL);
 
 			ResultSet rs = preparedStatement.executeQuery();
@@ -142,9 +167,9 @@ public class ProductModelDM implements ProductModel {
 				bean.setQuantity(rs.getInt("QUANTITY"));
 				bean.setRarity(rs.getInt("RARITY"));
 				bean.setDimension(rs.getDouble("DIMENSION"));
-				//bean.setFranchiseName(rs.getString("FRANCHISENAME"));
+				bean.setFranchiseName(rs.getString("FRANCHISENAME"));
 				bean.setSeries(rs.getString("SERIES"));
-				//bean.setMediumScore(rs.getDouble("MEDIUMSCORE"));
+				bean.setMediumScore(rs.getDouble("MEDIUMSCORE"));
 				products.add(bean);
 			}
 
@@ -153,7 +178,8 @@ public class ProductModelDM implements ProductModel {
 				if (preparedStatement != null)
 					preparedStatement.close();
 			} finally {
-				DriverManagerConnectionPool.releaseConnection(connection);
+				if (connection != null)
+					connection.close();
 			}
 		}
 		return products;

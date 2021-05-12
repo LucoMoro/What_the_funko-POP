@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import it.unisa.model.UserBean;
-import it.unisa.model.UserModel;
-import it.unisa.model.UserModelDM;
-import it.unisa.model.UserModelDS;
+import it.unisa.model.DS.UserModelDS;
+import it.unisa.model.Model.UserModel;
+import it.unisa.model.Model.UserModelDM;
 
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {

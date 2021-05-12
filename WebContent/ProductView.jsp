@@ -8,15 +8,15 @@
 		return;
 	}
 	
-	ProductBean product = (ProductBean) request.getAttribute("product");
+	ProductBean product = (ProductBean) request.getAttribute("product"); //definisce una varibile di tipo ProductBean e preleva i valori
 	
-	Cart cart = (Cart) request.getAttribute("cart");
+	Cart cart = (Cart) request.getAttribute("cart"); //definisce una variabile di tipo Cart e preleva i valori
 	
 	//request.getSession().removeAttribute("utente");
 	
-	UserBean utente= (UserBean) request.getSession().getAttribute("utente");
+	UserBean utente= (UserBean) request.getSession().getAttribute("utente"); //definisce una variabile di tipo UserBean e preleva i valori
 	
-	request.getSession().setAttribute("Action", "view");
+	request.getSession().setAttribute("Action", "view"); //definisce la variabile @action= view
 %>
 
 <!DOCTYPE html>
@@ -47,8 +47,10 @@ else { %>
 			<th>Price</th>
             <th>Quantity</th>
             <th>Rarity</th>
-            <th>Dimenison</th>
+            <th>Dimension</th>
+            <th>Franchise Name</th>
             <th>Series</th>
+            <th>Medium score</th>
 			<th>Action</th>
 		</tr>
 		<%
@@ -64,7 +66,9 @@ else { %>
 			<td><%=bean.getQuantity()%></td>
 			<td><%=bean.getRarity() %></td>
             <td><%=bean.getDimension() %></td>
+            <td><%=bean.getFranchiseName() %></td>
             <td><%=bean.getSeries() %></td>
+            <td><%=bean.getMediumScore() %></td>
 			 <td>
 				
 				<form action="Prodotto" method="post">

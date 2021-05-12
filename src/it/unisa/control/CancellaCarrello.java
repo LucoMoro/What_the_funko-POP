@@ -24,24 +24,10 @@ public class CancellaCarrello extends HttpServlet {
 		Cart cart= (Cart) request.getSession().getAttribute("cart");
 		//necessario per salvare gli ordini prima di rimuoverli completamente dal carrello
 		
-		Cart orders = (Cart) request.getSession().getAttribute("orders");
 		
-		if (orders== null || orders.getProducts().size()==0) {
-			orders= cart.clone();
-		}
-		else {
-			for (int i=0; i<cart.getProducts().size(); i++) {
-				orders.addProduct(cart.getProducts().get(i));
-			}
-		}
-				
-		/*for(int i=0; i<orders.getProducts().size(); i++) {
-			System.out.println(orders.getProducts().get(i));
-		}*/
-				
 		GregorianCalendar data= new GregorianCalendar();
 		
-		request.setAttribute("data", data);
+		request.getSession().setAttribute("data", data);
 		
 		request.getSession().setAttribute("orders", orders);
 		

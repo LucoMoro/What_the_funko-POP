@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.unisa.model.ProductModel;
-import it.unisa.model.ProductModelDM;
-import it.unisa.model.ProductModelDS;
+import it.unisa.model.DS.ProductModelDS;
+import it.unisa.model.Model.ProductModel;
+import it.unisa.model.Model.ProductModelDM;
 import it.unisa.model.Cart;
 import it.unisa.model.ProductBean;
 

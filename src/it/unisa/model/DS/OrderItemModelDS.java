@@ -1,20 +1,24 @@
-package it.unisa.model;
+package it.unisa.model.DS;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
+//import java.util.Collection;
+//import java.util.LinkedList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-public class UserModelDS implements UserModel {
-	private static DataSource ds;
+import it.unisa.model.DriverManagerConnectionPool;
+import it.unisa.model.OrderItem;
+import it.unisa.model.Model.OrderItemModel;
+
+public class OrderItemModelDS implements OrderItemModel {
+private static DataSource ds;
 	
 	static {
 		try {
@@ -27,29 +31,30 @@ public class UserModelDS implements UserModel {
 			System.out.println("Error:" + e.getMessage());
 		}
 	}
-
-	private static final String TABLE_NAME = "cliente";
 	
-	//@Override
-	public synchronized void doSave (UserBean user) throws SQLException {
+	private static final String TABLE_NAME = "compone";
+
+	@Override
+	public void doSave(OrderItem product, int orderCode) throws SQLException {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		String insertSQL = "INSERT INTO " + UserModelDS.TABLE_NAME
-				+ " (ID, PASSWORD, EMAIL) VALUES (?, ?, ?)";
+		String insertSQL= "INSERT INTO" + OrderItemModelDS.TABLE_NAME + 
+				"( N_OGGETTO, PRODUCT_CODE) VALUES (?, ?)";
 
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
 			preparedStatement = connection.prepareStatement(insertSQL);
-			preparedStatement.setString(1, user.getID());
-			preparedStatement.setString(2, user.getPassword());
-			preparedStatement.setString(3, user.getEmail());
-			
+			//preparedStatement.setString(1, product.getOrderCode());
+			preparedStatement.setInt(2, product.getOrderQuantity());
+			preparedStatement.setInt(3, product.getProductCode());
 			preparedStatement.executeUpdate();
 
 			connection.commit();
-		} finally {
+		}
+
+		finally {
 			try {
 				if (preparedStatement != null)
 					preparedStatement.close();
@@ -57,30 +62,31 @@ public class UserModelDS implements UserModel {
 				DriverManagerConnectionPool.releaseConnection(connection);
 			}
 		}
-	}
-	
 
-	public synchronized UserBean doRetrieveByKey(String ID) throws SQLException {
+	}
+
+	@Override
+	public OrderItem doRetrieveByKey(int orderCode) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		UserBean bean = new UserBean();
+		OrderItem orderItem= new OrderItem();
 
-		String selectSQL = "SELECT * FROM " + UserModelDS.TABLE_NAME + " WHERE ID = ?";
+		String selectSQL = "SELECT * FROM " + OrderItemModelDS.TABLE_NAME + " WHERE CODICE_ORDINE = ?";
 
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
 			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setString(1, ID);
+			preparedStatement.setInt(1, orderCode);
 
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
-				bean.setID(rs.getString("ID"));
-				bean.setPassword(rs.getString("password"));
-				bean.setEmail(rs.getString("email"));
+				orderItem.setOrderCode(rs.getString("CODICE_ORDINE"));
+				orderItem.setOrderQuantity(rs.getInt("N_OGGETTO"));
+				orderItem.setProductCode(rs.getInt("PRODUCT_CODE"));
 			}
-
+			
 		} finally {
 			try {
 				if (preparedStatement != null)
@@ -89,17 +95,22 @@ public class UserModelDS implements UserModel {
 				DriverManagerConnectionPool.releaseConnection(connection);
 			}
 		}
-		return bean;
+		
+		return orderItem;
+	
 	}
 
 
-	public synchronized ArrayList<UserBean> doRetrieveAll() throws SQLException {
+	@Override
+	public ArrayList<OrderItem> doRetrieveAll() throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		
-		ArrayList <UserBean> users= new ArrayList<UserBean>();
+		ArrayList <OrderItem> order= new ArrayList<OrderItem>();
+		
+		OrderItem ordered = new OrderItem();
 
-		String selectSQL = "SELECT * FROM " + UserModelDS.TABLE_NAME;
+		String selectSQL = "SELECT * FROM " + OrderItemModelDS.TABLE_NAME;
 
 
 		try {
@@ -108,12 +119,11 @@ public class UserModelDS implements UserModel {
 
 			ResultSet rs = preparedStatement.executeQuery();
 
-			while (rs.next()) {
-				UserBean bean = new UserBean();
-				bean.setID(rs.getString("ID"));
-				bean.setPassword(rs.getString("password"));
-				bean.setEmail(rs.getString("email"));
-				users.add(bean);
+			while (rs.next()) { //vado ad inserire i valori
+				ordered.setOrderCode(rs.getString("CODICE_ORDINE"));
+				ordered.setOrderQuantity(rs.getInt("N_OGGETTO"));
+				ordered.setProductCode(rs.getInt("PRODUCT_CODE"));
+				order.add(ordered);
 			}
 
 		} finally {
@@ -124,8 +134,7 @@ public class UserModelDS implements UserModel {
 				DriverManagerConnectionPool.releaseConnection(connection);
 			}
 		}
-		return users;
+		return order;
 	}
-	
-		
+
 }

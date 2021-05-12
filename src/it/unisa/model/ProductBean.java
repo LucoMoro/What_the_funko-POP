@@ -16,7 +16,7 @@ public class ProductBean implements Serializable {
 	private String FranchiseName;
 	private String series;
 	private double  mediumScore;
-	private int quantità;
+	//private int quantità;
 
 	public ProductBean() {
 		code = -1;
@@ -28,7 +28,7 @@ public class ProductBean implements Serializable {
 		FranchiseName= "";
 		series="";
 		mediumScore=0;
-		quantità=1;
+		//quantità=1;
 	}
 
 	public int getCode() {
@@ -111,13 +111,13 @@ public class ProductBean implements Serializable {
 		this.mediumScore=  mediumScore;
 	}
 	
-	public int getQuantità() {
+	/*public int getQuantità() {
 		return this.quantità;
 	}
 	
 	public void setQuantità(int quantit) {
 		this.quantità=quantit;
-	}
+	}*/
 	
 	
 	

@@ -2,8 +2,11 @@
 	pageEncoding="UTF-8"%>
 
 <% Cart orders = (Cart) request.getSession().getAttribute("orders");
-   GregorianCalendar newdata= (GregorianCalendar) request.getAttribute("data");
-
+   GregorianCalendar newdata= (GregorianCalendar) request.getSession().getAttribute("data");
+   int giorno=newdata.get(Calendar.DATE);
+   int mese=newdata.get(Calendar.MONTH) + 1;
+   int anno=newdata.get(Calendar.YEAR);
+   String data= "" + giorno + "/" + mese + "/" + anno;
    double somma=0;
    
    %>
@@ -31,8 +34,10 @@
 			<th>Price</th>
 			<th>Quantity</th>
 			<th>Rarity</th>
-			<th>Dimenison</th>
+			<th>Dimension</th>
+			<th>Franchise Name</th>
 			<th>Series</th>
+			<th>Medium Score</th>
 			<th>Action</th>
 			<th> Date </th>
 		</tr>
@@ -51,18 +56,17 @@
 			<td><%=bean.getQuantità()%></td>
 			<td><%=bean.getRarity() %></td>
 			<td><%=bean.getDimension() %></td>
+			<td><%=bean.getFranchiseName() %></td>
 			<td><%=bean.getSeries() %></td>
+			<th><%=bean.getMediumScore() %>
 			<td><form action="Prodotto" method="post">
 					<input type="hidden" name="id" value="<%= bean.getCode() %>">
 					<input type="submit" value="Dettagli">
 				</form></td>
-			<td><%= newdata %></td>
-				<% somma= somma + (bean.getPrice()* bean.getQuantità()); %>
+				<td><%= data %></td>
+						<% somma= somma + (bean.getPrice()* bean.getQuantità()); %>
 				
 
-				
-
-			</td>
 		</tr>
 		<% } %>
 		<p>

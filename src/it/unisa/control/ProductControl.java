@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.unisa.model.ProductModel;
-import it.unisa.model.ProductModelDM;
-import it.unisa.model.ProductModelDS;
+import it.unisa.model.DS.ProductModelDS;
+import it.unisa.model.Model.ProductModel;
+import it.unisa.model.Model.ProductModelDM;
 import it.unisa.model.Cart;
 import it.unisa.model.ProductBean;
 
@@ -71,7 +71,7 @@ public class ProductControl extends HttpServlet {
 					double dimension= Double.parseDouble(request.getParameter("dimension"));
 					String FranchiseName = request.getParameter("FranchiseName");
 					String series= request.getParameter("series");
-					Double mediumScore= Double.parseDouble(request.getParameter("mediumScore"));
+					double mediumScore= Double.parseDouble(request.getParameter("mediumScore"));
 					
 					
 					ProductBean bean = new ProductBean();
@@ -81,9 +81,9 @@ public class ProductControl extends HttpServlet {
 					bean.setQuantity(quantity);
 					bean.setRarity(rarity);
 					bean.setDimension(dimension);
-					//bean.setFranchiseName(FranchiseName);
+					bean.setFranchiseName(FranchiseName);
 					bean.setSeries(series);
-					//bean.setMediumScore(mediumScore);
+					bean.setMediumScore(mediumScore);
 					model.doSave(bean);
 				}
 			}			

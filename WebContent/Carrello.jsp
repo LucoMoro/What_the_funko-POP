@@ -33,6 +33,7 @@
 			%>
 	<p>Il tuo carrello è vuoto</p>
 	<a href="ProductView.jsp"> Ritorna al sito</a>
+	<a href="Orders.jsp"> Vedi i tuoi ordini</a>
 	<%}
 		
 		else { %>

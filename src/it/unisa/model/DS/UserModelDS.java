@@ -1,23 +1,46 @@
-package it.unisa.model;
+package it.unisa.model.DS;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-//import java.util.Collection;
-//import java.util.LinkedList;
+import java.util.Collection;
+import java.util.LinkedList;
 
-public class UserModelDM implements UserModel {
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+import it.unisa.model.DriverManagerConnectionPool;
+import it.unisa.model.UserBean;
+import it.unisa.model.Model.UserModel;
+
+public class UserModelDS implements UserModel {
+	private static DataSource ds;
+	
+	static {
+		try {
+			Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+
+			ds = (DataSource) envCtx.lookup("jdbc/storage");
+
+		} catch (NamingException e) {
+			System.out.println("Error:" + e.getMessage());
+		}
+	}
+
 	private static final String TABLE_NAME = "cliente";
 	
 	//@Override
-	public synchronized void doSave(UserBean user) throws SQLException {
+	public synchronized void doSave (UserBean user) throws SQLException {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		String insertSQL = "INSERT INTO " + UserModelDM.TABLE_NAME
+		String insertSQL = "INSERT INTO " + UserModelDS.TABLE_NAME
 				+ " (ID, PASSWORD, EMAIL) VALUES (?, ?, ?)";
 
 		try {
@@ -39,16 +62,15 @@ public class UserModelDM implements UserModel {
 			}
 		}
 	}
-
 	
-	//@Override
+
 	public synchronized UserBean doRetrieveByKey(String ID) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
 		UserBean bean = new UserBean();
 
-		String selectSQL = "SELECT * FROM " + UserModelDM.TABLE_NAME + " WHERE ID = ?";
+		String selectSQL = "SELECT * FROM " + UserModelDS.TABLE_NAME + " WHERE ID = ?";
 
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
@@ -62,7 +84,7 @@ public class UserModelDM implements UserModel {
 				bean.setPassword(rs.getString("password"));
 				bean.setEmail(rs.getString("email"));
 			}
-			
+
 		} finally {
 			try {
 				if (preparedStatement != null)
@@ -73,15 +95,15 @@ public class UserModelDM implements UserModel {
 		}
 		return bean;
 	}
-	
-	//@Override
+
+
 	public synchronized ArrayList<UserBean> doRetrieveAll() throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		
 		ArrayList <UserBean> users= new ArrayList<UserBean>();
 
-		String selectSQL = "SELECT * FROM " + UserModelDM.TABLE_NAME;
+		String selectSQL = "SELECT * FROM " + UserModelDS.TABLE_NAME;
 
 
 		try {
@@ -108,6 +130,6 @@ public class UserModelDM implements UserModel {
 		}
 		return users;
 	}
-
 	
+		
 }
