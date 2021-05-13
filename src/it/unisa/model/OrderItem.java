@@ -3,13 +3,13 @@ package it.unisa.model;
 public class OrderItem {
 	private int productCode;
 	private int orderQuantity;
-	private String orderCode;
+	private int orderCode;
 	
 	
-	public OrderItem(CartItem cartItem, String orderCode) { //in cartItem ci sono tutti i prodotti e la quantità
-		productCode= cartItem.getProduct().getCode();//così noi prendiamo solo il codice del prodotto e non tutti i valori
+	public OrderItem(CartItem cartItem) { //in cartItem ci sono tutti i prodotti e la quantità
+		productCode= cartItem.getProduct().getCode(); //così noi prendiamo solo il codice del prodotto e non tutti i valori
 		orderQuantity= cartItem.getQuantity();
-		this.orderCode= orderCode;
+		orderCode=0;
 	}
 	
 	public OrderItem() {
@@ -24,11 +24,11 @@ public class OrderItem {
 		this.orderQuantity= orderQuantity;
 	}
 	
-	public String getOrderCode() {
+	public int getOrderCode() {
 		return orderCode;
 	}
 	
-	public void setOrderCode(String x) {
+	public void setOrderCode(int x) {
 		this.orderCode= x;
 	}
 	

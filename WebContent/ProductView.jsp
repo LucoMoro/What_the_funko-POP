@@ -30,6 +30,9 @@
 </head>
 
 <body>
+
+<img src="./Images/logo.png">
+
 <% if(utente==null){ %>
 	<p> Non sei connesso, <a href="Login.jsp"> accedi </a> </p>
 <%}

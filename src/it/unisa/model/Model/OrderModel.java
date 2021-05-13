@@ -11,5 +11,5 @@ public interface OrderModel {
 
 	public OrderBean doRetrieveByKey(String ID, int orderCode) throws SQLException;
 	
-	public ArrayList<OrderBean> doRetrieveAll(int orderCode) throws SQLException;
+	public ArrayList<OrderBean> doRetrieveAll(String ID) throws SQLException;
 }

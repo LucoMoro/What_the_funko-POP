@@ -41,7 +41,7 @@ public class UserModelDS implements UserModel {
 		PreparedStatement preparedStatement = null;
 
 		String insertSQL = "INSERT INTO " + UserModelDS.TABLE_NAME
-				+ " (ID, PASSWORD, EMAIL) VALUES (?, ?, ?)";
+				+ " (ID, ID_PASSWORD, EMAIL) VALUES (?, ?, ?)";
 
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
@@ -81,8 +81,8 @@ public class UserModelDS implements UserModel {
 
 			while (rs.next()) {
 				bean.setID(rs.getString("ID"));
-				bean.setPassword(rs.getString("password"));
-				bean.setEmail(rs.getString("email"));
+				bean.setPassword(rs.getString("ID_PASSWORD"));
+				bean.setEmail(rs.getString("EMAIL"));
 			}
 
 		} finally {
@@ -115,8 +115,8 @@ public class UserModelDS implements UserModel {
 			while (rs.next()) {
 				UserBean bean = new UserBean();
 				bean.setID(rs.getString("ID"));
-				bean.setPassword(rs.getString("password"));
-				bean.setEmail(rs.getString("email"));
+				bean.setPassword(rs.getString("ID_PASSWORD"));
+				bean.setEmail(rs.getString("EMAIL"));
 				users.add(bean);
 			}
 

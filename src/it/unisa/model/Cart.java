@@ -25,8 +25,7 @@ public class Cart {
 		products.add(cartItem);
 	}
 
-
-
+	
 	public void deleteProduct(ProductBean product) {
 		for (int i=0; i<products.size(); i++) {
 
@@ -62,6 +61,10 @@ public class Cart {
 		for(int i=0; i< products.size(); i++) {
 			deleteProduct(products.get(i).getProduct()); //cancella il prodotto in cima a CartItem iterando per ogni elemento
 		}
+	}
+	
+	public CartItem get(int i) {
+		return products.get(i);
 	}
 }
 

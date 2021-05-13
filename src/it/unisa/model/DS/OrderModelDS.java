@@ -62,9 +62,8 @@ private static DataSource ds;
 			preparedStatement = connection.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
 			preparedStatement.setString(1, user.getID());
 			preparedStatement.setString(2, user.getDataConsegna());
-			//preparedStatement.setString(3, user.getOrderCode());
-			preparedStatement.setDouble(4, user.getIva());
-			preparedStatement.setString(5, user.getDataOrdine());
+			preparedStatement.setDouble(3, user.getIva());
+			preparedStatement.setString(4, user.getDataOrdine());
 			preparedStatement.executeUpdate();
 			
 			ResultSet rs= preparedStatement.getGeneratedKeys();
@@ -112,11 +111,10 @@ private static DataSource ds;
 
 			//while (rs.next()) {
 				bean.setID(rs.getString("ID"));
-				bean.setDataConsegna(rs.getString("data_consegna"));
-				bean.setOrderCode(rs.getString("codice_ordine"));
-				bean.setIva(rs.getDouble("iva"));
-				bean.setDataConsegna(rs.getString("data_ordine"));
-
+				bean.setDataConsegna(rs.getString("DATA_CONSEGNA"));
+				bean.setOrderCode(rs.getInt("CODICE_ORDINE"));
+			//	bean.setIva(rs.getDouble("iva"));
+				bean.setDataConsegna(rs.getString("DATA_ORDINE"));
 
 				String selectSQL2 = "SELECT * FROM " + OrderModelDS.TABLE_NAME2 + " WHERE CODICE_ORDINE = ?";
 				try {
@@ -127,7 +125,7 @@ private static DataSource ds;
 					ResultSet rs1 = preparedStatement1.executeQuery();
 
 					while (rs1.next()) {
-						orderItem.setOrderCode(rs1.getString("CODICE_ORDINE"));
+						orderItem.setOrderCode(rs1.getInt("CODICE_ORDINE"));
 						orderItem.setOrderQuantity(rs1.getInt("N_OGGETTO"));
 						orderItem.setProductCode(rs1.getInt("PRODUCT_CODE"));
 						arrayOrder.add(orderItem);
@@ -159,7 +157,7 @@ private static DataSource ds;
 
 
 	//@Override
-	public synchronized ArrayList<OrderBean> doRetrieveAll(int orderCode) throws SQLException {
+	public synchronized ArrayList<OrderBean> doRetrieveAll(String ID) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		Connection connection1 = null;
@@ -169,33 +167,34 @@ private static DataSource ds;
 		OrderItem orderItem = new OrderItem();
 		ArrayList<OrderItem> arrayOrder = new ArrayList <OrderItem>();
 
-		String selectSQL = "SELECT * FROM " + OrderModelDS.TABLE_NAME;
+		String selectSQL = "SELECT * FROM " + OrderModelDS.TABLE_NAME + "WHERE ID = ?";
 
 
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
 			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setString(1, ID);
 
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
 				OrderBean bean = new OrderBean();
 				bean.setID(rs.getString("ID"));
-				bean.setDataConsegna(rs.getString("data_consegna"));
-				bean.setOrderCode(rs.getString("codice_ordine"));
-				bean.setIva(rs.getDouble("iva"));
-				bean.setDataConsegna(rs.getString("data_ordine"));
+				bean.setDataConsegna(rs.getString("DATA_CONSEGNA"));
+				bean.setOrderCode(rs.getInt("CODICE_ORDINE"));
+				//bean.setIva(rs.getDouble("IVA"));
+				bean.setDataOrdine(rs.getString("DATA_ORDINE"));
 				
-				String selectSQL2 = "SELECT * FROM " + OrderModelDS.TABLE_NAME2 + " WHERE CODICE_ORDINE = ?";
+				String selectSQL2 = "SELECT * FROM " + OrderModelDS.TABLE_NAME2 + " WHERE CODICE_ORDINE= ?";
 				try {
 					connection1 = DriverManagerConnectionPool.getConnection();
 					preparedStatement1 = connection1.prepareStatement(selectSQL2);
-					preparedStatement1.setInt(1, orderCode);
+					preparedStatement1.setInt(1, bean.getOrderCode());
 
 					ResultSet rs1 = preparedStatement1.executeQuery();
 
 					while (rs1.next()) {
-						orderItem.setOrderCode(rs1.getString("CODICE_ORDINE"));
+						orderItem.setOrderCode(rs1.getInt("CODICE_ORDINE"));
 						orderItem.setOrderQuantity(rs1.getInt("N_OGGETTO"));
 						orderItem.setProductCode(rs1.getInt("PRODUCT_CODE"));
 						arrayOrder.add(orderItem);

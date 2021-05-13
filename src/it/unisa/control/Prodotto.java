@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import it.unisa.model.DS.ProductModelDS;
 import it.unisa.model.Model.ProductModel;
-import it.unisa.model.Model.ProductModelDM;
 import it.unisa.model.Cart;
 import it.unisa.model.ProductBean;
 
@@ -23,16 +22,8 @@ public class Prodotto extends HttpServlet {
 
 	static boolean isDataSource = true;
 	
-	static ProductModel model;
-	
-	static {
-		if (isDataSource) {
-			model = new ProductModelDS();
-		} else {
-			model = new ProductModelDM();
-		}
-	}
-	
+	static ProductModel model= new ProductModelDS();
+
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	

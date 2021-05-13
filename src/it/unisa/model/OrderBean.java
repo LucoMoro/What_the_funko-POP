@@ -9,19 +9,19 @@ public class OrderBean implements Serializable {
 	
 	private String ID;
 	
-	private String dataConsegna;
+	private String dataConsegna;//
 	private double iva;
-	private String dataOrdine;
-	private String orderCode;
+	private String dataOrdine;//
+	private int  orderCode;
 	private ArrayList<OrderItem> orderItem;
 	
 
 	public OrderBean() {
 		ID="";
 		dataConsegna="";
-		iva=0;
+		iva=22;
 		dataOrdine="";
-		orderCode="";
+		orderCode=0;
 		orderItem= new ArrayList<OrderItem>();
 	}
 
@@ -35,14 +35,6 @@ public class OrderBean implements Serializable {
 	}
 
 	
-	/*public int size() {
-		return orderItem.size();
-	}
-	
-	public OrderItem get(int i) {
-		return orderItem.get(i);
-	}*/
-	
 	public ArrayList<OrderItem> getOrderItems(){
 		return orderItem;
 	}
@@ -51,14 +43,6 @@ public class OrderBean implements Serializable {
 		this.orderItem =orderItem;
 	}
 	
-	/*public String getCodiceOrdine(OrderItem x) {
-		return x.getOrderCode();
-	}
-
-	public void setCodiceOrdine(OrderItem x, String codiceOrdine) {
-		x.setOrderCode(codiceOrdine);
-	}*/
-
 
 	public String getDataConsegna() {
 		return dataConsegna;
@@ -68,40 +52,25 @@ public class OrderBean implements Serializable {
 		this.dataConsegna= dataConsegna;
 	}
 	
-	/*public int getProductCode(OrderItem orderItem) {
-		return orderItem.getProductCode();
-	}
-
-	public void setProductCode(OrderItem orderItem, int codice) {
-		orderItem.setProductCode(codice);
-	}
 	
-	public int getOrderQuantity(OrderItem orderItem) {
-		return orderItem.getOrderQuantity();
-	}
-	
-	public void setOrderQuantity(OrderItem orderItem, int orderQuantity) {
-		orderItem.setOrderQuantity(orderQuantity);
-	}*/
-	
-	public String getOrderCode() {
+	public int getOrderCode() {
 		return orderCode;
 	}
 	
-	public void setOrderCode(String x) {
+	public void setOrderCode(int x) {
 		this.orderCode= x;
 	}
 	
 	public double getIva() {
 		return iva;
 	}
-
-	public void setIva(double iva) {
-		this.iva = iva;
-	}
 	
+	public void setIva(double iva) {
+		this.iva=iva;
+	}
+
 	public String getDataOrdine() {
-		return dataConsegna;
+		return dataOrdine;
 	}
 	
 	public void setDataOrdine(String dataOrdine) {

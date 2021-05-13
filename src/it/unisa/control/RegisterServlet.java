@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import it.unisa.model.UserBean;
 import it.unisa.model.DS.UserModelDS;
 import it.unisa.model.Model.UserModel;
-import it.unisa.model.Model.UserModelDM;
 
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
@@ -22,15 +21,8 @@ public class RegisterServlet extends HttpServlet {
 		
 	static boolean isDataSource = true;
 
-	static UserModel model;
+	static UserModel model= new UserModelDS();
 
-	static {
-		if (isDataSource) {
-			model = new UserModelDS();
-		} else {
-			model = new UserModelDM();
-		}
-	}
 
 public RegisterServlet() {
         super();

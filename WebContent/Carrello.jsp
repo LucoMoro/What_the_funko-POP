@@ -9,7 +9,7 @@
 
 <html>
 <%@ page contentType="text/html; charset=UTF-8"
-	import="java.util.*,it.unisa.model.ProductBean,it.unisa.model.Cart, it.unisa.model.UserBean"%>
+	import="java.util.*,it.unisa.model.ProductBean,it.unisa.model.Cart, it.unisa.model.UserBean,  it.unisa.model.CartItem"%>
 
 <head>
 <meta charset="ISO-8859-1">
@@ -45,19 +45,23 @@
 			<th>Quantity</th>
 		</tr>
 		<%
-			ArrayList<ProductBean> carrello= cart.getProducts();
+			ArrayList<CartItem> carrello= cart.getProducts();
 		
 			ProductBean beancart;
+			
+			int quantità=0;
+			
 		for(int i=0; i<carrello.size(); i++){
-			beancart=carrello.get(i);
+			beancart=carrello.get(i).getProduct();
+			quantità=carrello.get(i).getQuantity();
 			 %>
 		<tr>
 			<td><%=beancart.getCode()%></td>
 			<td><%=beancart.getName()%></td>
 			<td><%=beancart.getPrice()%></td>
-			<td><%=beancart.getQuantità() %></td>
+			<td><%=quantità%></td>
 		</tr>
-		<% somma= somma + (beancart.getPrice()* beancart.getQuantità()); %>
+		<% somma= somma + (beancart.getPrice()* quantità); %>
 		<% } %>
 		
 		<p>

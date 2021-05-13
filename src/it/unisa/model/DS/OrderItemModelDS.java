@@ -34,6 +34,7 @@ private static DataSource ds;
 	
 	private static final String TABLE_NAME = "compone";
 
+	
 	@Override
 	public void doSave(OrderItem product, int orderCode) throws SQLException {
 
@@ -46,9 +47,8 @@ private static DataSource ds;
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
 			preparedStatement = connection.prepareStatement(insertSQL);
-			//preparedStatement.setString(1, product.getOrderCode());
-			preparedStatement.setInt(2, product.getOrderQuantity());
-			preparedStatement.setInt(3, product.getProductCode());
+			preparedStatement.setInt(1, product.getOrderQuantity());
+			preparedStatement.setInt(2, product.getProductCode());
 			preparedStatement.executeUpdate();
 
 			connection.commit();
@@ -62,8 +62,9 @@ private static DataSource ds;
 				DriverManagerConnectionPool.releaseConnection(connection);
 			}
 		}
-
 	}
+	
+	
 
 	@Override
 	public OrderItem doRetrieveByKey(int orderCode) throws SQLException {
@@ -82,7 +83,7 @@ private static DataSource ds;
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
-				orderItem.setOrderCode(rs.getString("CODICE_ORDINE"));
+				orderItem.setOrderCode(rs.getInt("CODICE_ORDINE"));
 				orderItem.setOrderQuantity(rs.getInt("N_OGGETTO"));
 				orderItem.setProductCode(rs.getInt("PRODUCT_CODE"));
 			}
@@ -120,7 +121,7 @@ private static DataSource ds;
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) { //vado ad inserire i valori
-				ordered.setOrderCode(rs.getString("CODICE_ORDINE"));
+				ordered.setOrderCode(rs.getInt("CODICE_ORDINE"));
 				ordered.setOrderQuantity(rs.getInt("N_OGGETTO"));
 				ordered.setProductCode(rs.getInt("PRODUCT_CODE"));
 				order.add(ordered);

@@ -40,7 +40,8 @@ public class ProductModelDS implements ProductModel {
 		PreparedStatement preparedStatement = null;
 
 		String insertSQL = "INSERT INTO " + ProductModelDS.TABLE_NAME
-				+ " (PRODUCT_NAME, PRODUCT_DESCRIPTION, PRICE, QUANTITY, RARITY, DIMENSION, FRANCHISENAME, SERIES, MEDIUMSCORE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " (PRODUCT_NAME, PRODUCT_DESCRIPTION, PRICE, QUANTITY, RARITY, "
+				+ "DIMENSION, FRANCHISENAME, SERIES, MEDIUMSCORE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try {
 			connection = ds.getConnection();
@@ -70,25 +71,25 @@ public class ProductModelDS implements ProductModel {
 	}
 
 	@Override
-	public synchronized ProductBean doRetrieveByKey(int code) throws SQLException {
+	public synchronized ProductBean doRetrieveByKey(int product_code) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
 		ProductBean bean = new ProductBean();
 
-		String selectSQL = "SELECT * FROM " + ProductModelDS.TABLE_NAME + " WHERE CODE = ?";
+		String selectSQL = "SELECT * FROM " + ProductModelDS.TABLE_NAME + " WHERE PRODUCT_CODE = ?";
 
 		try {
 			connection = ds.getConnection();
 			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setInt(1, code);
+			preparedStatement.setInt(1, product_code);
 
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
-				bean.setCode(rs.getInt("CODE"));
-				bean.setName(rs.getString("NAME"));
-				bean.setDescription(rs.getString("DESCRIPTION"));
+				bean.setCode(rs.getInt("PRODUCT_CODE"));
+				bean.setName(rs.getString("PRODUCT_NAME"));
+				bean.setDescription(rs.getString("PRODUCT_DESCRIPTION"));
 				bean.setPrice(rs.getInt("PRICE"));
 				bean.setQuantity(rs.getInt("QUANTITY"));
 				bean.setRarity(rs.getInt("RARITY"));
@@ -111,18 +112,18 @@ public class ProductModelDS implements ProductModel {
 	}
 
 	@Override
-	public synchronized boolean doDelete(int code) throws SQLException {
+	public synchronized boolean doDelete(int product_code) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
 		int result = 0;
 
-		String deleteSQL = "DELETE FROM " + ProductModelDS.TABLE_NAME + " WHERE CODE = ?";
+		String deleteSQL = "DELETE FROM " + ProductModelDS.TABLE_NAME + " WHERE PRODUCT_CODE = ?";
 
 		try {
 			connection = ds.getConnection();
 			preparedStatement = connection.prepareStatement(deleteSQL);
-			preparedStatement.setInt(1, code);
+			preparedStatement.setInt(1, product_code);
 
 			result = preparedStatement.executeUpdate();
 
@@ -160,9 +161,9 @@ public class ProductModelDS implements ProductModel {
 			while (rs.next()) {
 				ProductBean bean = new ProductBean();
 
-				bean.setCode(rs.getInt("CODE"));
-				bean.setName(rs.getString("NAME"));
-				bean.setDescription(rs.getString("DESCRIPTION"));
+				bean.setCode(rs.getInt("PRODUCT_CODE"));
+				bean.setName(rs.getString("PRODUCT_NAME"));
+				bean.setDescription(rs.getString("PRODUCT_DESCRIPTION"));
 				bean.setPrice(rs.getInt("PRICE"));
 				bean.setQuantity(rs.getInt("QUANTITY"));
 				bean.setRarity(rs.getInt("RARITY"));
